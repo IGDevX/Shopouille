@@ -1,6 +1,4 @@
-"use client";
-
-import { ChartColumnStacked, ChevronRight, Package } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import {
   Collapsible,
@@ -16,44 +14,14 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { tabs } from "@/utils/tabs";
 import { Link } from "react-router";
-
-const items = [
-  {
-    title: "Products",
-    url: "#",
-    icon: Package,
-    isActive: true,
-    items: [
-      {
-        title: "List",
-        url: "/products/list",
-      },
-      {
-        title: "Create",
-        url: "/products/create",
-      },
-    ],
-  },
-  {
-    title: "Categories",
-    url: "#",
-    icon: ChartColumnStacked,
-    isActive: false,
-    items: [
-      {
-        title: "List",
-        url: "/categories/list",
-      },
-    ],
-  },
-];
 
 export function NavMain() {
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {items.map((item) => (
+        {tabs.map((item) => (
           <Collapsible
             key={item.title}
             asChild

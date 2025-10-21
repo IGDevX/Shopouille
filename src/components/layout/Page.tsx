@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/layout/AppSidebar";
+import { AppSidebar } from "@/components/layout/side-bar/AppSidebar";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -24,6 +24,8 @@ export default function Page() {
             />
           </div>
         </header>
+
+        {/* Place here the Route to the page made with refine */}
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <Routes>
             <Route path="/products/list" element={<ListProducts />} />

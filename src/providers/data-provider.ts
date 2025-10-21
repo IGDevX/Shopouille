@@ -2,6 +2,10 @@ import type { DataProvider } from "@refinedev/core";
 
 const API_URL = "https://api.fake-rest.refine.dev";
 
+/*
+  Define all the methods to fetch the api
+  you can add or edit methods
+*/
 export const dataProvider: DataProvider = {
   getOne: async ({ resource, id }) => {
     const response = await fetch(`${API_URL}/${resource}/${id}`);

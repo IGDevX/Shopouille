@@ -1,3 +1,5 @@
+import { NavMain } from "@/components/layout/side-bar/NavMain";
+import { NavUser } from "@/components/layout/side-bar/NavUser";
 import {
   Sidebar,
   SidebarContent,
@@ -6,9 +8,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import * as React from "react";
-import chatLogo from "../../../public/logo.png";
-import { NavMain } from "./NavMain";
-import { NavUser } from "./NavUser";
+import chatLogo from "../../../../public/logo.png";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
