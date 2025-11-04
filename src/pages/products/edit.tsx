@@ -1,30 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm, useSelect } from "@refinedev/core";
+import { useForm } from "@refinedev/core";
 import { Save } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export const EditProduct = () => {
   const { onFinish, mutation, query } = useForm({
     action: "edit",
-    resource: "products",
+    resource: "product",
   });
 
   const record = query?.data?.data;
-
-  const { options } = useSelect({
-    resource: "categories",
-  });
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,10 +23,16 @@ export const EditProduct = () => {
     );
     onFinish({
       ...data,
-      price: Number(data.price).toFixed(2),
-      category: { id: Number(data.category) },
     });
   };
+
+  const [isActive, setIsActive] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (record?.isActive !== undefined) {
+      setIsActive(Boolean(record.isActive));
+    }
+  }, [record]);
 
   return (
     <Card>
@@ -46,12 +42,23 @@ export const EditProduct = () => {
       <CardContent>
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="title">Title</Label>
             <Input
               type="text"
-              id="name"
-              name="name"
-              defaultValue={record?.name}
+              id="title"
+              name="title"
+              defaultValue={record?.title}
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="slug">Slug</Label>
+            <Input
+              type="text"
+              id="slug"
+              name="slug"
+              defaultValue={record?.slug}
               required
             />
           </div>
@@ -60,58 +67,43 @@ export const EditProduct = () => {
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              name="description"
+              name="descriptionHtml"
               rows={3}
-              defaultValue={record?.description}
+              defaultValue={record?.descriptionHtml}
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="price">Price</Label>
-            <Input
-              type="number"
-              id="price"
-              name="price"
-              step=".01"
-              min="0"
-              defaultValue={record?.price}
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="material">Material</Label>
+            <Label htmlFor="seoTitle">seoTitle</Label>
             <Input
               type="text"
-              id="material"
-              name="material"
-              defaultValue={record?.material}
+              id="seoTitle"
+              name="seoTitle"
+              defaultValue={record?.seoTitle}
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="category">Category</Label>
-            <Select
-              name="category"
+            <Label htmlFor="seoDescription">seoDescription</Label>
+            <Textarea
+              id="seoDescription"
+              name="seoDescription"
+              rows={3}
+              defaultValue={record?.seoDescription}
               required
-              defaultValue={record?.category?.id?.toString()}
-            >
-              <SelectTrigger id="category">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {options?.map((option) => (
-                  <SelectItem
-                    key={option.value}
-                    value={option.value.toString()}
-                  >
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <Label htmlFor="isActive">isActive</Label>
+            <Checkbox
+              id="isActive"
+              checked={isActive}
+              onCheckedChange={(checked) => setIsActive(Boolean(checked))}
+            ></Checkbox>
+            <input type="hidden" name="isActive" value={String(isActive)} />
           </div>
 
           {mutation.isSuccess && (
@@ -122,7 +114,7 @@ export const EditProduct = () => {
 
           <Button type="submit" className="w-full gap-2">
             <Save className="w-4 h-4" />
-            Save
+            Edit
           </Button>
         </form>
       </CardContent>

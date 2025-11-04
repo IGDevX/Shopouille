@@ -14,12 +14,12 @@ export const tabs = [
     isActive: true,
     items: [
       {
-        title: "List",
-        url: "/admin/products/list",
+        title: "My products",
+        url: "/admin/product/list",
       },
       {
-        title: "Create",
-        url: "/admin/products/create",
+        title: "Create a product",
+        url: "/admin/product/create",
       },
     ],
   },

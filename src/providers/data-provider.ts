@@ -1,9 +1,5 @@
 import type { DataProvider } from "@refinedev/core";
 
-// BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
-const API_URL = "https://api.fake-rest.refine.dev";
-const CMS_API_URL = "http://localhost:8080/api";
-
 /*
   Define all the methods to fetch the api
   you can add or edit methods
@@ -11,14 +7,14 @@ const CMS_API_URL = "http://localhost:8080/api";
 export const dataProvider: DataProvider = {
   getOne: async ({ resource, id }) => {
     // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
-    let baseUrl = API_URL;
+    let baseUrl = import.meta.env.VITE_API_URL;
     switch (resource) {
       case "theme-settings":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         // theme-settings doesn't use id in the URL
         break;
       case "page-content":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       default:
         break;
@@ -38,14 +34,13 @@ export const dataProvider: DataProvider = {
   },
 
   getMany: async ({ resource, ids }) => {
-    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
-    let baseUrl = API_URL;
+    let baseUrl = import.meta.env.VITE_API_URL;
     switch (resource) {
       case "theme-settings":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       case "page-content":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       default:
         break;
@@ -66,15 +61,14 @@ export const dataProvider: DataProvider = {
   },
 
   update: async ({ resource, id, variables }) => {
-    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
-    let baseUrl = API_URL;
+    let baseUrl = import.meta.env.VITE_API_URL;
     switch (resource) {
       case "theme-settings":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         // theme-settings doesn't use id in the URL
         break;
       case "page-content":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       default:
         break;
@@ -96,19 +90,20 @@ export const dataProvider: DataProvider = {
     });
 
     if (response.status < 200 || response.status > 299) throw response;
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
     return { data };
   },
 
   getList: async ({ resource, pagination, sorters, filters }) => {
     // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
-    let baseUrl = API_URL;
+    let baseUrl = import.meta.env.VITE_API_URL;
     switch (resource) {
       case "theme-settings":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       case "page-content":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       default:
         break;
@@ -116,14 +111,8 @@ export const dataProvider: DataProvider = {
     const params = new URLSearchParams();
 
     if (pagination?.currentPage && pagination?.pageSize) {
-      params.append(
-        "_start",
-        String((pagination.currentPage - 1) * pagination.pageSize)
-      );
-      params.append(
-        "_end",
-        String(pagination.currentPage * pagination.pageSize)
-      );
+      params.append("pageIndex", String(pagination.currentPage - 1));
+      params.append("pageSize", String(pagination.pageSize));
     }
 
     if (sorters?.length) {
@@ -142,8 +131,10 @@ export const dataProvider: DataProvider = {
       }
     }
 
-    const url = `${baseUrl}/${resource}?${params}`;
-
+    const url =
+      params.size > 0
+        ? `${baseUrl}/${resource}?${params}`
+        : `${baseUrl}/${resource}`;
     const response = await fetch(url);
 
     if (response.status < 200 || response.status > 299) throw response;
@@ -154,14 +145,13 @@ export const dataProvider: DataProvider = {
   },
 
   create: async ({ resource, variables }) => {
-    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
-    let baseUrl = API_URL;
+    let baseUrl = import.meta.env.VITE_API_URL;
     switch (resource) {
       case "theme-settings":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       case "page-content":
-        baseUrl = CMS_API_URL;
+        baseUrl = import.meta.env.VITE_CMS_API_URL;
         break;
       default:
         break;
@@ -175,15 +165,25 @@ export const dataProvider: DataProvider = {
     });
 
     if (response.status < 200 || response.status > 299) throw response;
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+
     return { data };
   },
 
-  deleteOne: () => {
-    throw new Error("Not implemented");
-  },
+  deleteOne: async ({ resource, id }) => {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/${resource}/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
-  getApiUrl: () => {
-    return API_URL;
+    if (response.status < 200 || response.status > 299) throw response;
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+
+    return { data };
   },
+  getApiUrl: () => import.meta.env.VITE_API_URL,
 };

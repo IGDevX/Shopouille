@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -8,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useMany, useNavigation, useTable } from "@refinedev/core";
+import { useDelete, useNavigation, useTable } from "@refinedev/core";
 import {
   ArrowDown,
   ArrowUp,
@@ -21,24 +22,21 @@ import {
 export const ListProducts = () => {
   const {
     result,
-    tableQuery: { isLoading },
+    tableQuery,
     currentPage,
     setCurrentPage,
     pageCount,
     sorters,
     setSorters,
   } = useTable({
-    resource: "products",
+    resource: "product",
     pagination: { currentPage: 1, pageSize: 10 },
     sorters: { initial: [{ field: "id", order: "asc" }] },
   });
 
-  const { result: categories } = useMany({
-    resource: "categories",
-    ids: result?.data.map((product) => product.category?.id) ?? [],
-  });
-
+  const isLoading = tableQuery?.isLoading;
   const { edit } = useNavigation();
+  const deleteMutation = useDelete();
 
   const onPrevious = () => {
     if (currentPage > 1) {
@@ -63,6 +61,26 @@ export const ListProducts = () => {
     }
   };
 
+  const onDelete = (id?: number | string) => {
+    if (id === undefined) return;
+    if (!confirm("Delete this product ?")) return;
+
+    deleteMutation.mutate(
+      {
+        resource: "product",
+        id,
+      },
+      {
+        onSuccess: () => {
+          tableQuery?.refetch();
+        },
+        onError: (error) => {
+          console.error("Delete failed", error);
+        },
+      }
+    );
+  };
+
   const onSort = (field: string) => {
     const sorter = getSorter(field);
     setSorters(
@@ -80,6 +98,12 @@ export const ListProducts = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-40">Loading...</div>
+    );
+  }
+
+  if (!result?.data) {
+    return (
+      <div className="flex justify-center items-center h-40">No data found</div>
     );
   }
 
@@ -107,39 +131,38 @@ export const ListProducts = () => {
                     )}
                   </TableHead>
                   <TableHead
-                    onClick={() => onSort("name")}
+                    onClick={() => onSort("title")}
                     className="cursor-pointer select-none whitespace-nowrap"
                   >
-                    Name{" "}
-                    {getSorter("name") === "asc" && (
+                    Title{" "}
+                    {getSorter("title") === "asc" && (
                       <ArrowUp className="inline w-4 h-4" />
                     )}
-                    {getSorter("name") === "desc" && (
-                      <ArrowDown className="inline w-4 h-4" />
-                    )}
-                  </TableHead>
-                  <TableHead className="whitespace-nowrap">Category</TableHead>
-                  <TableHead
-                    onClick={() => onSort("material")}
-                    className="cursor-pointer select-none whitespace-nowrap"
-                  >
-                    Material{" "}
-                    {getSorter("material") === "asc" && (
-                      <ArrowUp className="inline w-4 h-4" />
-                    )}
-                    {getSorter("material") === "desc" && (
+                    {getSorter("title") === "desc" && (
                       <ArrowDown className="inline w-4 h-4" />
                     )}
                   </TableHead>
                   <TableHead
-                    onClick={() => onSort("price")}
+                    onClick={() => onSort("slug")}
                     className="cursor-pointer select-none whitespace-nowrap"
                   >
-                    Price{" "}
-                    {getSorter("price") === "asc" && (
+                    Slug{" "}
+                    {getSorter("slug") === "asc" && (
                       <ArrowUp className="inline w-4 h-4" />
                     )}
-                    {getSorter("price") === "desc" && (
+                    {getSorter("slug") === "desc" && (
+                      <ArrowDown className="inline w-4 h-4" />
+                    )}
+                  </TableHead>
+                  <TableHead
+                    onClick={() => onSort("isActive")}
+                    className="cursor-pointer select-none whitespace-nowrap"
+                  >
+                    IsActive{" "}
+                    {getSorter("isActive") === "asc" && (
+                      <ArrowUp className="inline w-4 h-4" />
+                    )}
+                    {getSorter("isActive") === "desc" && (
                       <ArrowDown className="inline w-4 h-4" />
                     )}
                   </TableHead>
@@ -153,20 +176,13 @@ export const ListProducts = () => {
                       {product.id}
                     </TableCell>
                     <TableCell className="whitespace-nowrap max-w-[180px] truncate">
-                      {product.name}
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap max-w-[160px] truncate">
-                      {
-                        categories?.data?.find(
-                          (category) => category.id == product.category?.id
-                        )?.title
-                      }
+                      {product.title}
                     </TableCell>
                     <TableCell className="whitespace-nowrap max-w-[200px] truncate">
-                      {product.material}
+                      {product.slug}
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
-                      {product.price}
+                      <Checkbox checked={product.isActive} disabled></Checkbox>
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
                       <div className="flex gap-2">
@@ -176,17 +192,17 @@ export const ListProducts = () => {
                           aria-label="Edit"
                           onClick={() => {
                             if (product.id !== undefined) {
-                              edit("products", product.id);
+                              edit("product", product.id);
                             }
                           }}
                         >
                           <Pencil className="w-4 h-4" />
                         </Button>
                         <Button
-                          variant="ghost"
+                          variant="destructive"
                           size="icon"
                           aria-label="Delete"
-                          disabled
+                          onClick={() => onDelete(product.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -197,6 +213,7 @@ export const ListProducts = () => {
               </TableBody>
             </Table>
           </div>
+
           <div className="flex flex-col sm:flex-row items-center justify-between mt-4 gap-2">
             <Button
               variant="outline"

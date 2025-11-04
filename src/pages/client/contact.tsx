@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -5,14 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
-import { useState } from "react";
-import { useList } from "@refinedev/core";
+import { Textarea } from "@/components/ui/textarea";
 import { PageContent } from "@/pages/personalization/components/ContentTab";
+import { useList } from "@refinedev/core";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
+import { useState } from "react";
 
 export const ContactPage = () => {
   const {
@@ -42,7 +42,6 @@ export const ContactPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implémenter l'envoi du formulaire
-    console.log("Formulaire soumis:", formData);
     alert("Votre message a été envoyé avec succès !");
     setFormData({ name: "", email: "", subject: "", message: "" });
   };

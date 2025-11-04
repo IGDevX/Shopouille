@@ -1,9 +1,9 @@
 export const resourcesRouter = [
   {
-    name: "products",
-    list: "/admin/products/list",
-    create: "/admin/products/create",
-    edit: "/admin/products/edit/:id",
+    name: "product",
+    list: "/admin/product/list",
+    create: "/admin/product/create",
+    edit: "/admin/product/edit/:id",
   },
   {
     name: "categories",
