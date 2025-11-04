@@ -5,12 +5,15 @@ import routerProvider, {
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
-import { BrowserRouter } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 import "./App.css";
-import Page from "./components/layout/Page";
+import AdminPage from "./components/layout/admin/AdminPage";
+import { ClientLayout } from "./components/layout/client/ClientLayout";
+import { ClientRoutes } from "./components/layout/client/ClientRoutes";
 import { Toaster } from "./components/refine-ui/notification/toaster";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
+import { CustomThemeProvider } from "./components/theme/CustomThemeProvider";
 import { dataProvider } from "./providers/data-provider";
 import { resourcesRouter } from "./utils/resources-router";
 
@@ -30,12 +33,23 @@ function App() {
               projectId: "5Ha9uf-6iEwAt-QjLCxs",
             }}
           >
-            <Page />
-
-            <Toaster />
-            <RefineKbar />
-            <UnsavedChangesNotifier />
-            <DocumentTitleHandler />
+            <CustomThemeProvider>
+              <Routes>
+                <Route path="/admin/*" element={<AdminPage />} />
+                <Route
+                  path="/*"
+                  element={
+                    <ClientLayout>
+                      <ClientRoutes />
+                    </ClientLayout>
+                  }
+                />
+              </Routes>
+              <Toaster />
+              <RefineKbar />
+              <UnsavedChangesNotifier />
+              <DocumentTitleHandler />
+            </CustomThemeProvider>
           </Refine>
         </ThemeProvider>
       </RefineKbarProvider>

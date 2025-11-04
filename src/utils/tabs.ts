@@ -15,11 +15,11 @@ export const tabs = [
     items: [
       {
         title: "List",
-        url: "/products/list",
+        url: "/admin/products/list",
       },
       {
         title: "Create",
-        url: "/products/create",
+        url: "/admin/products/create",
       },
     ],
   },
@@ -31,7 +31,7 @@ export const tabs = [
     items: [
       {
         title: "List",
-        url: "/categories/list",
+        url: "/admin/categories/list",
       },
     ],
   },
@@ -43,21 +43,15 @@ export const tabs = [
     items: [
       {
         title: "List",
-        url: "/stock/list",
+        url: "/admin/stock/list",
       },
     ],
   },
   {
-    title: "Mon site",
-    url: "#",
+    title: "Personaliser mon site",
+    url: "/admin/personalization",
     icon: Monitor,
     isActive: false,
-    items: [
-      {
-        title: "List",
-        url: "/pages/show",
-      },
-    ],
   },
   {
     title: "Journal",
@@ -67,7 +61,7 @@ export const tabs = [
     items: [
       {
         title: "List",
-        url: "/journal/list",
+        url: "/admin/journal/list",
       },
     ],
   },

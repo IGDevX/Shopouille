@@ -1,5 +1,5 @@
-import { NavMain } from "@/components/layout/side-bar/NavMain";
-import { NavUser } from "@/components/layout/side-bar/NavUser";
+import { NavMain } from "@/components/layout/admin/sidebar/NavMain";
+import { NavUser } from "@/components/layout/admin/sidebar/NavUser";
 import {
   Sidebar,
   SidebarContent,
@@ -8,7 +8,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import * as React from "react";
-import chatLogo from "../../../../public/logo.png";
+import chatLogo from "../../../../../public/logo.png";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -26,3 +26,4 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   );
 }
+

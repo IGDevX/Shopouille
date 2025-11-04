@@ -1,6 +1,8 @@
 import type { DataProvider } from "@refinedev/core";
 
+// BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
 const API_URL = "https://api.fake-rest.refine.dev";
+const CMS_API_URL = "http://localhost:8080/api";
 
 /*
   Define all the methods to fetch the api
@@ -8,7 +10,27 @@ const API_URL = "https://api.fake-rest.refine.dev";
 */
 export const dataProvider: DataProvider = {
   getOne: async ({ resource, id }) => {
-    const response = await fetch(`${API_URL}/${resource}/${id}`);
+    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
+    let baseUrl = API_URL;
+    switch (resource) {
+      case "theme-settings":
+        baseUrl = CMS_API_URL;
+        // theme-settings doesn't use id in the URL
+        break;
+      case "page-content":
+        baseUrl = CMS_API_URL;
+        break;
+      default:
+        break;
+    }
+
+    // For theme-settings, always use the base resource URL without id
+    const url =
+      resource === "theme-settings"
+        ? `${baseUrl}/${resource}`
+        : `${baseUrl}/${resource}/${id}`;
+
+    const response = await fetch(url);
 
     if (response.status < 200 || response.status > 299) throw response;
     const data = await response.json();
@@ -16,6 +38,19 @@ export const dataProvider: DataProvider = {
   },
 
   getMany: async ({ resource, ids }) => {
+    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
+    let baseUrl = API_URL;
+    switch (resource) {
+      case "theme-settings":
+        baseUrl = CMS_API_URL;
+        break;
+      case "page-content":
+        baseUrl = CMS_API_URL;
+        break;
+      default:
+        break;
+    }
+
     const params = new URLSearchParams();
 
     if (ids) {
@@ -24,14 +59,35 @@ export const dataProvider: DataProvider = {
       }
     }
 
-    const response = await fetch(`${API_URL}/${resource}?${params.toString()}`);
+    const response = await fetch(`${baseUrl}/${resource}?${params.toString()}`);
     if (response.status < 200 || response.status > 299) throw response;
     const data = await response.json();
     return { data };
   },
 
   update: async ({ resource, id, variables }) => {
-    const response = await fetch(`${API_URL}/${resource}/${id}`, {
+    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
+    let baseUrl = API_URL;
+    switch (resource) {
+      case "theme-settings":
+        baseUrl = CMS_API_URL;
+        // theme-settings doesn't use id in the URL
+        break;
+      case "page-content":
+        baseUrl = CMS_API_URL;
+        break;
+      default:
+        break;
+    }
+    // For theme-settings, always use the base resource URL without id
+    const url =
+      resource === "theme-settings"
+        ? `${baseUrl}/${resource}`
+        : id
+        ? `${baseUrl}/${resource}/${id}`
+        : `${baseUrl}/${resource}`;
+
+    const response = await fetch(url, {
       method: "PATCH",
       body: JSON.stringify(variables),
       headers: {
@@ -45,6 +101,18 @@ export const dataProvider: DataProvider = {
   },
 
   getList: async ({ resource, pagination, sorters, filters }) => {
+    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
+    let baseUrl = API_URL;
+    switch (resource) {
+      case "theme-settings":
+        baseUrl = CMS_API_URL;
+        break;
+      case "page-content":
+        baseUrl = CMS_API_URL;
+        break;
+      default:
+        break;
+    }
     const params = new URLSearchParams();
 
     if (pagination?.currentPage && pagination?.pageSize) {
@@ -74,7 +142,7 @@ export const dataProvider: DataProvider = {
       }
     }
 
-    const url = `${API_URL}/${resource}?${params}`;
+    const url = `${baseUrl}/${resource}?${params}`;
 
     const response = await fetch(url);
 
@@ -86,7 +154,19 @@ export const dataProvider: DataProvider = {
   },
 
   create: async ({ resource, variables }) => {
-    const response = await fetch(`${API_URL}/${resource}`, {
+    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
+    let baseUrl = API_URL;
+    switch (resource) {
+      case "theme-settings":
+        baseUrl = CMS_API_URL;
+        break;
+      case "page-content":
+        baseUrl = CMS_API_URL;
+        break;
+      default:
+        break;
+    }
+    const response = await fetch(`${baseUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(variables),
       headers: {
@@ -102,5 +182,8 @@ export const dataProvider: DataProvider = {
   deleteOne: () => {
     throw new Error("Not implemented");
   },
-  getApiUrl: () => API_URL,
+
+  getApiUrl: () => {
+    return API_URL;
+  },
 };
