@@ -1,123 +1,103 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "@refinedev/core";
-import { Save } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import Product from "@/types/product";
+import { useForm, useNavigation } from "@refinedev/core";
+import { ArrowLeft } from "lucide-react";
+import React from "react";
+import { useParams } from "react-router";
 
-export const EditProduct = () => {
-  const { onFinish, mutation, query } = useForm({
+export const EditProduct: React.FC = () => {
+  const { id } = useParams<{ id?: string }>();
+  const { list } = useNavigation();
+
+  const { onFinish, query } = useForm<Product>({
     action: "edit",
     resource: "product",
+    id: id,
   });
 
-  const record = query?.data?.data;
+  const record = query?.data?.data ?? null;
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = Object.fromEntries(
-      new FormData(event.currentTarget).entries()
+  if (!record || query?.isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <Spinner />
+      </div>
     );
-    onFinish({
-      ...data,
-    });
+  }
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const payload: Partial<Product> = {
+      title: String(fd.get("title") ?? ""),
+      slug: String(fd.get("slug") ?? ""),
+      descriptionHtml: String(fd.get("descriptionHtml") ?? ""),
+      seoTitle: String(fd.get("seoTitle") ?? ""),
+      seoDescription: String(fd.get("seoDescription") ?? ""),
+    };
+    onFinish(payload);
   };
 
-  const [isActive, setIsActive] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (record?.isActive !== undefined) {
-      setIsActive(Boolean(record.isActive));
-    }
-  }, [record]);
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">Edit Product</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="title">Title</Label>
-            <Input
-              type="text"
-              id="title"
-              name="title"
-              defaultValue={record?.title}
-              required
-            />
-          </div>
+    <>
+      <div className="flex items-center gap-8">
+        <Button
+          variant={"outline"}
+          size={"icon"}
+          className="my-6"
+          onClick={() => list("product")}
+        >
+          <ArrowLeft />
+        </Button>
+        <h1>Modifier un produit</h1>
+      </div>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="title">Titre</Label>
+          <Input id="title" name="title" defaultValue={record.title ?? ""} />
+        </div>
 
-          <div>
-            <Label htmlFor="slug">Slug</Label>
-            <Input
-              type="text"
-              id="slug"
-              name="slug"
-              defaultValue={record?.slug}
-              required
-            />
-          </div>
+        <div>
+          <Label htmlFor="slug">Slug</Label>
+          <Input id="slug" name="slug" defaultValue={record.slug ?? ""} />
+        </div>
 
-          <div>
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              name="descriptionHtml"
-              rows={3}
-              defaultValue={record?.descriptionHtml}
-              required
-            />
-          </div>
+        <div>
+          <Label htmlFor="descriptionHtml">Description (HTML)</Label>
+          <Textarea
+            id="descriptionHtml"
+            name="descriptionHtml"
+            defaultValue={record.descriptionHtml ?? ""}
+            rows={6}
+          />
+        </div>
 
-          <div>
-            <Label htmlFor="seoTitle">seoTitle</Label>
-            <Input
-              type="text"
-              id="seoTitle"
-              name="seoTitle"
-              defaultValue={record?.seoTitle}
-              required
-            />
-          </div>
+        <div>
+          <Label htmlFor="seoTitle">SEO Title</Label>
+          <Input
+            id="seoTitle"
+            name="seoTitle"
+            defaultValue={record.seoTitle ?? ""}
+          />
+        </div>
 
-          <div>
-            <Label htmlFor="seoDescription">seoDescription</Label>
-            <Textarea
-              id="seoDescription"
-              name="seoDescription"
-              rows={3}
-              defaultValue={record?.seoDescription}
-              required
-            />
-          </div>
+        <div>
+          <Label htmlFor="seoDescription">SEO Description</Label>
+          <Input
+            id="seoDescription"
+            name="seoDescription"
+            defaultValue={record.seoDescription ?? ""}
+          />
+        </div>
 
-          <div className="flex gap-3">
-            <Label htmlFor="isActive">isActive</Label>
-            <Checkbox
-              id="isActive"
-              checked={isActive}
-              onCheckedChange={(checked) => setIsActive(Boolean(checked))}
-            ></Checkbox>
-            <input type="hidden" name="isActive" value={String(isActive)} />
-          </div>
-
-          {mutation.isSuccess && (
-            <span className="text-green-600 text-sm">
-              Successfully submitted!
-            </span>
-          )}
-
-          <Button type="submit" className="w-full gap-2">
-            <Save className="w-4 h-4" />
-            Edit
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        <Button type="submit" className="w-full">
+          Enregistrer
+        </Button>
+      </form>
+    </>
   );
 };

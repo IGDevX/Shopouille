@@ -1,6 +1,6 @@
-import { HomePage } from "@/pages/client/home";
 import { CGVPage } from "@/pages/client/cgv";
 import { ContactPage } from "@/pages/client/contact";
+import { HomePage } from "@/pages/client/home";
 import { Route, Routes } from "react-router";
 
 export function ClientRoutes() {

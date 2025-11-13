@@ -1,13 +1,24 @@
 export const resourcesRouter = [
   {
+    name: "home-admin",
+    list: "/admin",
+  },
+  {
     name: "product",
     list: "/admin/product/list",
     create: "/admin/product/create",
     edit: "/admin/product/edit/:id",
+    show: "/admin/product/show/:id",
   },
   {
-    name: "categories",
-    list: "/admin/categories/list",
+    name: "variant",
+    edit: "/admin/variant/edit/:id",
+  },
+  {
+    name: "category",
+    list: "/admin/category/list",
+    create: "/admin/category/create",
+    edit: "/admin/category/edit/:id",
   },
   {
     name: "theme-settings",

@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, Building } from "lucide-react";
-import { ThemeTab } from "./components/ThemeTab";
+import { Building, Clock } from "lucide-react";
 import { ContentTab } from "./components/ContentTab";
+import { ThemeTab } from "./components/ThemeTab";
 
 export const PersonalizationPage = () => {
   return (

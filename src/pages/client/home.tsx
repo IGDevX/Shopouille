@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, ChevronDown, ShoppingBag } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useList } from "@refinedev/core";
+import { ChevronDown, ShoppingBag, Star } from "lucide-react";
 import { PageContent } from "../personalization/components/ContentTab";
 
 // Fake data
@@ -84,7 +84,7 @@ export const HomePage = () => {
     <div className="w-full">
       {/* Top Banner - Primary Color */}
       <div className="w-full bg-primary text-primary-foreground py-2 text-center text-sm font-medium">
-        ← Hugo is gay →
+        ← Cyril is gay →
       </div>
 
       <div className="w-full max-w-full px-4 sm:px-6 mx-auto">

@@ -7,14 +7,23 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useNavigation } from "@refinedev/core";
 import * as React from "react";
 import chatLogo from "../../../../../public/logo.png";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { list } = useNavigation();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <img src={chatLogo} alt="logo chat" />
+        <button
+          type="button"
+          onClick={() => list("home-admin")}
+          className="p-0 bg-transparent border-0 cursor-pointer"
+          aria-label="Go to home admin list"
+        >
+          <img src={chatLogo} alt="logo chat" />
+        </button>
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
@@ -26,4 +35,3 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   );
 }
-

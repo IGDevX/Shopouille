@@ -14,11 +14,11 @@ export const tabs = [
     isActive: true,
     items: [
       {
-        title: "My products",
+        title: "Mes Produits",
         url: "/admin/product/list",
       },
       {
-        title: "Create a product",
+        title: "Créer un produit",
         url: "/admin/product/create",
       },
     ],
@@ -30,8 +30,12 @@ export const tabs = [
     isActive: false,
     items: [
       {
-        title: "List",
-        url: "/admin/categories/list",
+        title: "My categories",
+        url: "/admin/category/list",
+      },
+      {
+        title: "Create a category",
+        url: "/admin/category/create",
       },
     ],
   },

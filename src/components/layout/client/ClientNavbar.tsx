@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Link } from "react-router";
-import { Settings, Menu } from "lucide-react";
-import chatLogo from "../../../../public/logo.png";
 import { cn } from "@/lib/utils";
+import { Menu, Settings } from "lucide-react";
+import { Link } from "react-router";
+import chatLogo from "../../../../public/logo.png";
 
 export function ClientNavbar() {
   return (
@@ -108,10 +108,7 @@ export function ClientNavbar() {
             className="h-9 w-9 shrink-0"
             aria-label="Accéder au back-office"
           >
-            <Link
-              to="/admin/products/list"
-              className="flex items-center justify-center"
-            >
+            <Link to="/admin/" className="flex items-center justify-center">
               <Settings className="h-4 w-4" />
             </Link>
           </Button>
@@ -120,4 +117,3 @@ export function ClientNavbar() {
     </header>
   );
 }
-

@@ -96,7 +96,6 @@ export const dataProvider: DataProvider = {
   },
 
   getList: async ({ resource, pagination, sorters, filters }) => {
-    // BAD PATTERN BUT TEMPORARY UNTIL WE HAVE A GATEWAY
     let baseUrl = import.meta.env.VITE_API_URL;
     switch (resource) {
       case "theme-settings":
@@ -156,6 +155,7 @@ export const dataProvider: DataProvider = {
       default:
         break;
     }
+
     const response = await fetch(`${baseUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(variables),
