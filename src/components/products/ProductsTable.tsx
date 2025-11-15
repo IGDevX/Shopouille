@@ -15,8 +15,8 @@ type ProductsTableProps = {
   data: Product[];
   onSort: (field: string) => void;
   getSorter: (field: string) => "asc" | "desc" | undefined;
-  edit: (...args: unknown[]) => void;
-  show: (...args: unknown[]) => void;
+  edit: (resource: string, id: Product["id"]) => void;
+  show: (resource: string, id: Product["id"]) => void;
   onDelete: (id?: Product["id"]) => void;
 };
 
