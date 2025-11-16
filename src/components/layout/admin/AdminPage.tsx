@@ -8,6 +8,7 @@ import { PersonalizationPage } from "@/pages/personalization";
 import { CreateProduct } from "@/pages/products/create";
 import { EditProduct } from "@/pages/products/edit";
 import { ListProducts } from "@/pages/products/list";
+import {StockList} from "@/pages/stocks/list";
 import { ShowProduct } from "@/pages/products/show";
 import { EditVariant } from "@/pages/variants/edit";
 import { Route, Routes } from "react-router";
@@ -31,6 +32,8 @@ export default function AdminPage() {
             <Route path="product/show/:id" element={<ShowProduct />} />
 
             <Route path="variant/edit/:id" element={<EditVariant />} />
+
+            <Route path="stock/list" element={<StockList/>} />
 
             <Route path="personalization" element={<PersonalizationPage />} />
 

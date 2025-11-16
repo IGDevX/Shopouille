@@ -46,7 +46,7 @@ export const tabs = [
     isActive: false,
     items: [
       {
-        title: "List",
+        title: "Gestion des stocks",
         url: "/admin/stock/list",
       },
     ],

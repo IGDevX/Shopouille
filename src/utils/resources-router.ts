@@ -15,6 +15,10 @@ export const resourcesRouter = [
     edit: "/admin/variant/edit/:id",
   },
   {
+    name: "stock",
+    edit: "/admin/stock/list",
+  },
+  {
     name: "category",
     list: "/admin/category/list",
     create: "/admin/category/create",
