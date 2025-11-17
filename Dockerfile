@@ -16,7 +16,12 @@ RUN \
 
 FROM base as builder
 
+ARG VITE_API_URL
+ARG VITE_CMS_API_URL
+
 ENV NODE_ENV production
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_CMS_API_URL=${VITE_CMS_API_URL}
 
 COPY --from=deps /app/refine/node_modules ./node_modules
 
