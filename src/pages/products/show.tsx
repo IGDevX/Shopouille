@@ -1,6 +1,13 @@
 import PaginationControls from "@/components/products/PaginationControls";
 import VariantsTable from "@/components/products/VariantsTable";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import Variant from "@/types/variant";
 import { useDelete, useNavigation, useTable } from "@refinedev/core";
@@ -68,27 +75,47 @@ export const ShowProduct = () => {
   }
 
   return (
-    <div className="w-full max-w-full px-2 sm:px-6 mx-auto">
-      <div className="flex items-center gap-8">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant={"outline"} size={"icon"} onClick={() => list("product")}>
+            <ArrowLeft />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-semibold">Variantes du produit</h1>
+            <p className="text-muted-foreground text-sm">
+              Visualisez et gérez les déclinaisons associées.
+            </p>
+          </div>
+        </div>
         <Button
-          variant={"outline"}
-          size={"icon"}
-          className="my-6"
-          onClick={() => list("product")}
+          variant="outline"
+          onClick={() => productId && edit("product", productId)}
+          disabled={!productId}
         >
-          <ArrowLeft></ArrowLeft>
+          Modifier le produit
         </Button>
-        <h1>Product Title</h1>
       </div>
-      {resultVariant?.data?.length ? (
-        <>
-          <VariantsTable
-            data={resultVariant.data}
-            onSort={onSortVariant}
-            getSorter={getSorterVariant}
-            edit={edit}
-            onDelete={onDeleteVariant}
-          />
+      <Card className="overflow-hidden">
+        <CardHeader>
+          <CardTitle>Variantes</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          {resultVariant?.data?.length ? (
+            <VariantsTable
+              data={resultVariant.data}
+              onSort={onSortVariant}
+              getSorter={getSorterVariant}
+              edit={edit}
+              onDelete={onDeleteVariant}
+            />
+          ) : (
+            <div className="flex justify-center items-center h-40">
+              No variants found
+            </div>
+          )}
+        </CardContent>
+        <CardFooter className="justify-end">
           <PaginationControls
             currentPage={currentPageVariant}
             pageCount={pageCountVariant}
@@ -96,12 +123,8 @@ export const ShowProduct = () => {
             onNext={onNextVariant}
             onPage={onPageVariant}
           />
-        </>
-      ) : (
-        <div className="flex justify-center items-center h-40">
-          No variants found
-        </div>
-      )}
+        </CardFooter>
+      </Card>
     </div>
   );
 };

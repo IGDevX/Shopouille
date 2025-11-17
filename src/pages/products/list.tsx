@@ -1,11 +1,19 @@
 import PaginationControls from "@/components/products/PaginationControls";
 import ProductsTable from "@/components/products/ProductsTable";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import Product from "@/types/product";
 import { useDelete, useNavigation, useTable } from "@refinedev/core";
 
 export const ListProducts = () => {
-  const { edit, show } = useNavigation();
+  const { edit, show, create } = useNavigation();
   const deleteMutation = useDelete();
 
   const {
@@ -58,17 +66,39 @@ export const ListProducts = () => {
   }
 
   return (
-    <div className="w-full max-w-full px-2 sm:px-6 mx-auto">
-      {resultProduct?.data?.length ? (
-        <>
-          <ProductsTable
-            data={resultProduct.data}
-            onSort={onSortProduct}
-            getSorter={getSorterProduct}
-            edit={edit}
-            show={show}
-            onDelete={onDeleteProduct}
-          />
+    <div className="space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold">Catalogue produits</h1>
+          <p className="text-muted-foreground">
+            Consultez, triez et gérez vos produits depuis une vue uniforme.
+          </p>
+        </div>
+        <Button onClick={() => create?.("product")} className="w-full sm:w-auto">
+          Ajouter un produit
+        </Button>
+      </div>
+      <Card className="overflow-hidden">
+        <CardHeader>
+          <CardTitle>Liste des produits</CardTitle>
+        </CardHeader>
+        <CardContent className="px-0">
+          {resultProduct?.data?.length ? (
+            <ProductsTable
+              data={resultProduct.data}
+              onSort={onSortProduct}
+              getSorter={getSorterProduct}
+              edit={edit}
+              show={show}
+              onDelete={onDeleteProduct}
+            />
+          ) : (
+            <div className="flex justify-center items-center h-40">
+              No products found
+            </div>
+          )}
+        </CardContent>
+        <CardFooter className="justify-end">
           <PaginationControls
             currentPage={currentPageProducts}
             pageCount={pageCountProducts}
@@ -76,12 +106,8 @@ export const ListProducts = () => {
             onNext={onNextProducts}
             onPage={onPageProducts}
           />
-        </>
-      ) : (
-        <div className="flex justify-center items-center h-40">
-          No products found
-        </div>
-      )}
+        </CardFooter>
+      </Card>
     </div>
   );
 };

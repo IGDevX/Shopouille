@@ -1,5 +1,6 @@
 import CategorySelect from "@/components/form/CategorySelect";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "@refinedev/core";
@@ -20,26 +21,46 @@ export const EditCategory: React.FC = () => {
     onFinish(data);
   };
 
-  if (formLoading) return <div>Loading...</div>;
+  if (formLoading)
+    return (
+      <div className="flex justify-center items-center h-40">Chargement...</div>
+    );
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <div className="space-y-6">
       <div>
-        <Label htmlFor="name">Name</Label>
-        <Input id="name" name="name" defaultValue={record?.name} required />
+        <h1 className="text-2xl font-semibold">Modifier la catégorie</h1>
+        <p className="text-muted-foreground text-sm">
+          Ajustez le nom ou la hiérarchie pour garder un catalogue cohérent.
+        </p>
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Informations</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nom</Label>
+              <Input id="name" name="name" defaultValue={record?.name} required />
+            </div>
 
-      <div className="flex flex-col gap-y-2">
-        <Label htmlFor="parent_id">Parent category</Label>
-        <CategorySelect
-          name="parent_id"
-          defaultValue={String(record?.parentId ?? "")}
-          allowEmpty
-        />
-      </div>
+            <div className="space-y-2">
+              <Label htmlFor="parent_id">Catégorie parente</Label>
+              <CategorySelect
+                name="parent_id"
+                defaultValue={String(record?.parentId ?? "")}
+                allowEmpty
+              />
+            </div>
 
-      <Button type="submit">Save</Button>
-    </form>
+            <Button type="submit" className="w-full">
+              Enregistrer
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

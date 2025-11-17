@@ -20,6 +20,10 @@ export function ClientNavbar() {
         "supports-backdrop-filter:bg-background/60"
       )}
     >
+      <div className="w-full bg-primary text-primary-foreground py-2 text-center text-xs sm:text-sm font-medium">
+        Livraison offerte en France dès 49 €
+      </div>
+
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
         {/* Logo et liens à gauche */}
         <div className="flex items-center gap-8 md:gap-12">
@@ -27,6 +31,19 @@ export function ClientNavbar() {
             <img src={chatLogo} alt="Shopouille logo" className="h-8 w-auto" />
           </Link>
           <nav className="hidden md:flex items-center gap-8">
+            <Link
+              to="/catalogue"
+              className={cn(
+                "text-sm",
+                "font-medium",
+                "text-muted-foreground",
+                "transition-colors",
+                "hover:text-foreground",
+                "whitespace-nowrap"
+              )}
+            >
+              Catalogue
+            </Link>
             <Link
               to="/cgv"
               className={cn(
@@ -72,6 +89,18 @@ export function ClientNavbar() {
             </SheetTrigger>
             <SheetContent side="left">
               <nav className="flex flex-col gap-4 mt-8">
+                <Link
+                  to="/catalogue"
+                  className={cn(
+                    "text-sm",
+                    "font-medium",
+                    "text-muted-foreground",
+                    "transition-colors",
+                    "hover:text-foreground"
+                  )}
+                >
+                  Catalogue
+                </Link>
                 <Link
                   to="/cgv"
                   className={cn(

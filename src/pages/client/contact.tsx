@@ -13,6 +13,7 @@ import { PageContent } from "@/pages/personalization/components/ContentTab";
 import { useList } from "@refinedev/core";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 export const ContactPage = () => {
   const {
@@ -56,33 +57,34 @@ export const ContactPage = () => {
   };
 
   return (
-    <div className="w-full max-w-full px-2 sm:px-6 mx-auto">
-      <div className="w-full max-w-6xl mx-auto space-y-8">
-        <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold">Contactez-nous</h1>
-          <p className="text-muted-foreground">
-            Nous sommes là pour répondre à toutes vos questions
-          </p>
-        </div>
+    <div className="space-y-6 px-4 lg:px-6">
+      <div className="mx-auto mt-6 flex max-w-6xl flex-col gap-2">
+        <h1 className="text-2xl font-semibold">Contactez-nous</h1>
+        <p className="text-sm text-muted-foreground">
+          Nous vous accompagnons du lundi au vendredi pour répondre à toutes vos
+          questions.
+        </p>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Contact Information */}
           <div className="space-y-4">
-            <Card>
+            <Card className="h-full">
               <CardHeader>
                 <CardTitle>Informations de contact</CardTitle>
                 <CardDescription>
-                  N'hésitez pas à nous contacter par l'un de ces moyens
+                  Choisissez le canal qui vous convient le mieux.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {isLoading ? (
-                  <div className="flex justify-center items-center h-40">
-                    Chargement...
+                  <div className="flex h-32 items-center justify-center">
+                    <Spinner />
                   </div>
                 ) : contactContent ? (
                   <div
-                    className="prose prose-sm max-w-none whitespace-pre-wrap"
+                    className="prose prose-sm max-w-none text-muted-foreground"
                     dangerouslySetInnerHTML={{
                       __html: formatContent(contactContent),
                     }}
@@ -90,7 +92,7 @@ export const ContactPage = () => {
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                      <Mail className="h-5 w-5 text-primary mt-0.5" />
+                      <Mail className="mt-0.5 h-5 w-5 text-primary" />
                       <div>
                         <p className="font-semibold">Email</p>
                         <p className="text-sm text-muted-foreground">
@@ -99,7 +101,7 @@ export const ContactPage = () => {
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <Phone className="h-5 w-5 text-primary mt-0.5" />
+                      <Phone className="mt-0.5 h-5 w-5 text-primary" />
                       <div>
                         <p className="font-semibold">Téléphone</p>
                         <p className="text-sm text-muted-foreground">
@@ -108,7 +110,7 @@ export const ContactPage = () => {
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-primary mt-0.5" />
+                      <MapPin className="mt-0.5 h-5 w-5 text-primary" />
                       <div>
                         <p className="font-semibold">Adresse</p>
                         <p className="text-sm text-muted-foreground">
@@ -126,17 +128,16 @@ export const ContactPage = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <Card>
+            <Card className="h-full">
               <CardHeader>
                 <CardTitle>Envoyez-nous un message</CardTitle>
                 <CardDescription>
-                  Remplissez le formulaire ci-dessous et nous vous répondrons
-                  dans les plus brefs délais
+                  Partagez votre demande, nous revenons vers vous rapidement.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="name">Nom complet *</Label>
                       <Input
@@ -186,10 +187,12 @@ export const ContactPage = () => {
                       required
                     />
                   </div>
-                  <Button type="submit" className="w-full sm:w-auto">
-                    <Send className="mr-2 h-4 w-4" />
-                    Envoyer le message
-                  </Button>
+                  <div className="flex justify-end">
+                    <Button type="submit" className="w-full sm:w-auto">
+                      <Send className="mr-2 h-4 w-4" />
+                      Envoyer le message
+                    </Button>
+                  </div>
                 </form>
               </CardContent>
             </Card>
