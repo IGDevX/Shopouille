@@ -1,9 +1,11 @@
-name: Build and Push Docker Image to GHCR (Staging)
+name: Build and Push Docker Image to GHCR (Production)
 
 on:
   push:
     branches:
-      - dev
+      - main
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 env:
@@ -57,6 +59,5 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
           build-args: |
-            VITE_API_URL=${{ secrets.VITE_API_URL }}
-            VITE_CMS_API_URL=${{ secrets.VITE_CMS_API_URL }}
-
+            VITE_API_URL=${{ secrets.VITE_API_PROD_URL }}
+            VITE_CMS_API_URL=${{ secrets.VITE_CMS_API_PROD_URL }}
